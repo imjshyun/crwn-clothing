@@ -1,8 +1,18 @@
-### [Udemy][andrei neagoie, yihua zhang] - Complete React Developer in 2020 (w Redux, Hooks, GraphQL)
+### 제목
+
+- [Udemy][andrei neagoie, yihua zhang] - Complete React Developer in 2020 (w Redux, Hooks, GraphQL)
+
+## 강좌 URI
+
+## GitHub
 
 - https://github.com/ZhangMYihua/lesson-34
 
-### Folder Structure
+## 추가 packages/modules
+
+- npm i axios firebase node-sass react-redux react-router-dom react-stripe-checkout redux redux-logger redux-persist redux-saga redux-thunk reselect styled-components
+
+## 폴더 구조
 
 - components: reusable components
 - pages: any page that we're not gonna use more than once
