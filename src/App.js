@@ -23,10 +23,12 @@ class App extends React.Component {
         userDocRef.onSnapshot((snapShot) => {
           this.setState(
             {
-              id: snapShot.id,
-              ...snapShot.data(),
-            },
-            () => console.log(this.state)
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data(),
+              },
+            }
+            // () => console.log(this.state)
           );
         });
       } else {
