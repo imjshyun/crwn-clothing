@@ -99,6 +99,32 @@ export const getCurrentUser = () => {
   });
 };*/
 
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userDocRef = firestore.doc(`users/${userAuth.uid}`);
+
+  const snapShot = await userDocRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userDocRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (err) {
+      console.error('error creating user', err.message);
+    }
+  }
+
+  return userDocRef;
+};
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
