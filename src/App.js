@@ -12,10 +12,15 @@ import CheckoutPage from './pages/checkout/CheckoutPage';
 
 import Header from './components/header/Header';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import {
+  auth,
+  createUserProfileDocument,
+  // addCollectionAndDocuments, // 사용하던 static data를 firestore에 똑같이 만들기 위해 한번만 하는 작업
+} from './firebase/firebase.utils';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
+// import { selectCollectionsForPreview } from './redux/shop/shop.selectors'; // 사용하던 static data를 firestore에 똑같이 만들기 위해 한번만 하는 작업
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
@@ -38,6 +43,10 @@ class App extends React.Component {
         });
       } else {
         setCurrentUser(userAuth); // userAuth는 null이다.
+        // addCollectionAndDocuments(
+        //   'collections',
+        //   collectionsArray.map(({ title, items }) => ({ title, items }))
+        // ); // 사용하던 static data를 firestore에 똑같이 만들기 위해 한번만 하는 작업
       }
     });
   }
@@ -73,6 +82,7 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  // collectionsArray: selectCollectionsForPreview, // 사용하던 static data를 firestore에 똑같이 만들기 위해 한번만 하는 작업
 });
 
 const mapDispatchToProps = (dispatch) => ({

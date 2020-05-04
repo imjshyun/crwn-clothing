@@ -125,6 +125,48 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userDocRef;
 };
 
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  // objs를 갖는 obj를 objs를 갖는 array로 컨버트
+  // {
+  //   hats: {routeName: "hats", id: "quuP71Bw7clbQXoKvJQU", title: "Hats", items: Array(9)}
+  //   jackets: {routeName: "jackets", id: "xvlG2ViidykRcEayr1Ut", title: "Jackets", items: Array(5)}
+  //   mens: {routeName: "mens", id: "s2p09RGrmd7ABfk0Kcw2", title: "Mens", items: Array(6)}
+  //   sneakers: {routeName: "sneakers", id: "NheWPPUEC2sObJBsSa39", title: "Sneakers", items: Array(8)}
+  //   womens: {routeName: "womens", id: "LnoFpP8pqod0FVmEsCKx", title: "Womens", items: Array(7)}
+  // }
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection; // 결과는 위 참조
+    return accumulator;
+  }, {});
+};
+
+/*// 사용하던 static data를 firestore에 똑같이 만들기 위해 한번만 사용할 메소드
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch(); // firebase는 한번에 set 하나만 실행가능하다. 여러개를 위해 batchfㄹ 이용하자
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc(); // 유니크 id를 갖는 docReference를 생성
+    batch.set(newDocRef, obj); // newDocRef.set대신 batch를 사용해 중간에 문제 생겨도 한꺼번에 성공하거나 실패하게 함
+  });
+
+  return await batch.commit();
+};*/
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 

@@ -17,15 +17,14 @@ export const selectCollections = createSelector(
 
 export const selectCollectionsForPreview = createSelector(
   [selectCollections],
-  (collections) => Object.keys(collections).map((key) => collections[key]) // obj의 key값을들 array로 받고 이 어레이를 다시 map하여 key에 매치되는 값들을 포함한 새로운 array를 반환
+  (collections) =>
+    collections ? Object.keys(collections).map((key) => collections[key]) : [] // obj의 key값을들 array로 받고 이 어레이를 다시 map하여 key에 매치되는 값들을 포함한 새로운 array를 반환
 );
 
 export const selectCollection = (collectionUrlParam) =>
-  createSelector(
-    [selectCollections],
-    (collections) =>
-      // collections.find(
-      //   (collection) => collection.id === COLLECTION_ID_MAP[collectionUrlParam]
-      // )
-      collections[collectionUrlParam]
+  createSelector([selectCollections], (collections) =>
+    // collections.find(
+    //   (collection) => collection.id === COLLECTION_ID_MAP[collectionUrlParam]
+    // )
+    collections ? collections[collectionUrlParam] : null
   );
