@@ -10,7 +10,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { onSnapshot } from 'firebase/firestore';
-import { setCurrentUser } from './redux/user/user.action';
+import { setCurrentUser } from './redux/user/user.actions';
 
 class App extends Component {
   unsubscribeFromAuth = null;
