@@ -40,7 +40,7 @@ class App extends Component {
             }
           );
 
-          console.log(this.state);
+          // console.log(this.state);
         });
       } else {
         this.setState({ currentUser: userAuth }); // user가 로긴하지 않았으니 userAuth는 null임
