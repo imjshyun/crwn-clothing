@@ -1,17 +1,22 @@
 import { Component } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { onSnapshot } from 'firebase/firestore';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import './App.css';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import Header from './components/header/header.component';
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-import { onSnapshot } from 'firebase/firestore';
-import { setCurrentUser } from './redux/user/user.actions';
+import CheckoutPage from './pages/checkout/checkout.component';
 
+import Header from './components/header/header.component';
+
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
+import { setCurrentUser } from './redux/user/user.actions';
+import { selectCurrentUser } from './redux/user/user.selectors';
 class App extends Component {
   unsubscribeFromAuth = null;
   unsub = null;
@@ -49,6 +54,7 @@ class App extends Component {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/shop' element={<ShopPage />} />
+          <Route path='/checkout' element={<CheckoutPage />} />
           <Route
             exact
             path='/signin'
@@ -66,8 +72,14 @@ class App extends Component {
   }
 }
 
+/* // 문제점: 카트와 상관없는 state가 바뀌면 이 컴퍼넌트도 다시 호출된다. 죽, 이 함수도 계속 실행된다. reselect로 해결
+// memoization = caching. cartItem이 바뀌지 않을때 불필요한 함수 실행을 피하게 해준다.
+// mapStateToProps안의 코드를 따로 빼준다
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser,
+}); */
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({

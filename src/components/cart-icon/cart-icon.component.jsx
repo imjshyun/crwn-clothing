@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import { toggleCartHidden } from '../../redux/cart/cart.actions';
 import { selectCartItemsCount } from '../../redux/cart/cart.selectors';
@@ -28,8 +29,11 @@ const mapStateToProps = ({ cart: { cartItems }}) => ({
   itemCount: cartItems.reduce(
     (accumulatedQuantity, cartItem) => accumulatedQuantity + cartItem.quantity, 0) 
 }) */
-const mapStateToProps = (state) => ({
+/* const mapStateToProps = (state) => ({
   itemCount: selectCartItemsCount(state) // 이제 cart-icon 컴퍼넌트는 관련없는 state가 업데이트되도 re-render되지 않는다
+}) */
+const mapStateToProps = createStructuredSelector({
+  itemCount: selectCartItemsCount  // createStructuredSelector를 사용해 코드를 더 줄여주었다
 })
 
 export default connect(

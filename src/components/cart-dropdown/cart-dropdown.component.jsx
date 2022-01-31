@@ -1,20 +1,40 @@
-import { connect} from 'react-redux'
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+// import { withRouter } from '../../utils/with-router.hook'; // class 컴퍼넌트일때 custom withrouter를 사용
+import { useNavigate } from 'react-router-dom';
 
 import CustomButton from './../custom-button/custom-button.component';
 import CartItem from './../cart-item/cart-item.component';
-import { selectCartItems } from '../../redux/cart/cart.selectors'
+import { selectCartItems } from '../../redux/cart/cart.selectors';
+import { toggleCartHidden } from './../../redux/cart/cart.actions';
 
-import './cart-dropdown.styles.scss'
+import './cart-dropdown.styles.scss';
 
-const CartDropdown = ({cartItems}) => {
-  return <div className='cart-dropdown'>
-    <div className='cart-items'>
-      {cartItems.map(cartItem => (
-        <CartItem key={cartItem.id} item={cartItem} />
-      ))}
+const CartDropdown = ({ cartItems, history, toggleCartHidden }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className='cart-dropdown'>
+      <div className='cart-items'>
+        {cartItems.length ? (
+          cartItems.map((cartItem) => (
+            <CartItem key={cartItem.id} item={cartItem} />
+          ))
+        ) : (
+          <span className='empty-message'>Your cart is empty</span>
+        )}
+      </div>
+      {/* <CustomButton onClick={() => history.push('/checkout')}>GO TO CHECKOUT</CustomButton> */}
+      <CustomButton
+        onClick={() => {
+          navigate('/checkout');
+          toggleCartHidden();
+        }}
+      >
+        GO TO CHECKOUT
+      </CustomButton>
     </div>
-    <CustomButton>GO TO CHECKOUT</CustomButton>
-  </div>;
+  );
 };
 
 /* 
@@ -24,8 +44,12 @@ const CartDropdown = ({cartItems}) => {
 const mapStateToProps = ({ cart: { cartItems }}) => ({
   cartItems
 }) */
-const mapStateToProps = (state) => ({
+/* const mapStateToProps = (state) => ({
   cartItems: selectCartItems(state) // 이제 cart dropdown 컴퍼넌트는 관련없는 state가 업데이트되도 re-render되지 않는다
-})
+}) */
+const mapStateToProps = createStructuredSelector({
+  cartItems: selectCartItems, // createStructuredSelector를 사용해 코드를 더 줄여주었다
+});
 
-export default connect(mapStateToProps)(CartDropdown);
+// export default withRouter(connect(mapStateToProps)(CartDropdown)); // class 컴퍼넌트일때 custom withrouter를 사용
+export default connect(mapStateToProps, { toggleCartHidden })(CartDropdown); // toggleCartHidden을 여기서 안넣고 컴퍼넌트 함수에 전달되는 dispatch를 사용해도 된다 dispatch(toggleCartHidden()) 이렇게
